@@ -16,6 +16,7 @@ public class MemberPage {
 			System.out.println(login.currentId + "님 환영합니다.");
 			System.out.println("현재 적립 포인트 " + point.readPoint(login.currentId) + "점");
 			System.out.println("1. 주문하기");
+			// 포인트 추가
 			System.out.println("2. 내 정보 확인");
 			System.out.println("3. 로그아웃");
 			int num3 = Integer.parseInt(sc.nextLine().trim());
