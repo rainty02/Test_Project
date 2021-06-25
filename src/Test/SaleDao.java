@@ -88,7 +88,7 @@ public class SaleDao {
 		int result = 0 ;
 
 
-		String sql = "insert into sale (salecode, sname, price,id) values(sale_sq.nextval, ?, ?, ?)";
+		String sql = "insert into sale (salecode, sname, price, id, count) values(sale_sq.nextval, ?, ?, ?, ?)";
 
 
 		try {
@@ -98,7 +98,8 @@ public class SaleDao {
 
 				pstmt.setString(1,list.get(i).getSname());
 				pstmt.setInt(2, list.get(i).getPrice());
-				pstmt.setString(3, list.get(i).getId());
+				pstmt.setString(3, currentid);
+				pstmt.setInt(4, list.get(i).getScount());
 				result = pstmt.executeUpdate();
 			}
 		} catch (SQLException e) {

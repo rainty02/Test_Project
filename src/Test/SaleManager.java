@@ -23,6 +23,7 @@ public class SaleManager {
 	Login login = new Login(MemberDao.getInstance());
 	int totalPrice;
 	int expectedPoint;
+	ArrayList<Sale> list;
 	
 	// Connection 객체 생성 
 	Connection conn = null;
@@ -161,7 +162,7 @@ public class SaleManager {
 	void order(String currentId) {
 		
 		MenuManager menuManager = new MenuManager(MenuDao.getInstance());
-		ArrayList<Sale> list = new ArrayList<>();
+		list = new ArrayList<>();
 
 		//connection객체 생성
 		Connection conn = null;
@@ -190,13 +191,13 @@ public class SaleManager {
 				}
 				for (int inx=0; inx<menu.size(); inx++) {	
 					if (Integer.parseInt(inputDatas[0]) == menu.get(inx).getRowNum()) {
-						list.add(new Sale(menu.get(inx).getMname(), menu.get(inx).getPrice()*Integer.parseInt(inputDatas[1]))) ;
+						list.add(new Sale(Integer.parseInt(inputDatas[1]), menu.get(inx).getMname(), menu.get(inx).getPrice()*Integer.parseInt(inputDatas[1])));
+						
 						System.out.println(menu.get(inx).getMname()+ " "+ inputDatas[1]+"잔 주문");
 					}
 				}
 			}
-				
-				
+	
 					// 주문완료시에 데이터 저장하고, 포인트 적립 및 결제 한다. 
 					int result = dao.insertSale(conn, list, currentId);  //SaleDao 로 넘겨서 Sale DB에 저장하기
 
@@ -219,6 +220,8 @@ public class SaleManager {
 
 				
 					//------------------------------------------------------------------------------------------
+					
+					
 					
 		} catch (SQLException e) {
 
@@ -290,10 +293,17 @@ public class SaleManager {
 
 						System.out.println("--------------------------------------------------");
 					}
-
-
 					
-
+					// 영수증
+					System.out.println("메뉴\t\t수량 \t금액");
+					for(int i=0; i<list.size(); i++) {
+						if(list.get(i).getSname().length() >= 8) {
+							System.out.println(list.get(i).getSname() + "\t" + list.get(i).getScount() + "\t" + (list.get(i).getPrice()*list.get(i).getScount()));
+						} else {
+							System.out.println(list.get(i).getSname() + "\t\t" + list.get(i).getScount() + "\t" + (list.get(i).getPrice()*list.get(i).getScount()));
+						}	
+					}	
+					System.out.println("\t\t총액 : "+totalPrice);
 	}
 
 }

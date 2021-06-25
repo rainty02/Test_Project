@@ -5,8 +5,10 @@ public class Sale {
 
 	private int salecode; // 판매코드
 	private String sname; // 메뉴이름
+	private int scount; // 메뉴 판매 수
 	private int price; // 가격
 	private String saledate; // 판매된 날짜
+	
 	private int count; // 인기순위 매기기 위한 변수
 	
 	private String pName; // 메뉴 이름 (메뉴당)
@@ -33,10 +35,11 @@ public class Sale {
 		this.id = id;
 	}
 	
-	//생성자 오버로딩 2 : SaleDB에 저장하게 될 때 사용자
-	public Sale(String sname, int price) { 
+	//생성자 오버로딩 2 : SaleDB에 저장하게 될 때 사용자 + 각 메뉴별 수량 추가
+	public Sale(int scount, String sname, int price) { 
 		this.sname = sname;
 		this.price= price;
+		this.scount = scount;
 	}
 	
 	//생성자 오버로딩 2-6/25일 추가 ->Sale DB에 저장하게 될 때 사용자 아이디도 같이 저장하기 2021.06.25
@@ -77,7 +80,16 @@ public class Sale {
 	public void setSname(String sname) {
 		this.sname = sname;
 	}
-
+	
+	
+	public int getScount() {
+		return scount;
+	}
+	
+	public void setScount(int scount) {
+		this.scount = scount;
+	}
+	
 	public int getPrice() {
 		return price;
 	}
