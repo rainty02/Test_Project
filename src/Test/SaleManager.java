@@ -303,7 +303,7 @@ public class SaleManager {
 							System.out.println(list.get(i).getSname() + "\t\t" + list.get(i).getScount() + "\t" + (list.get(i).getPrice()*list.get(i).getScount()));
 						}	
 					}	
-					System.out.println("\t\t총액 : "+totalPrice);
+					System.out.println("\t\t총액 :\t"+totalPrice);
 	}
 
 }
