@@ -58,13 +58,18 @@ public class SaleManager {
 
 			System.out.println("판매 정보 리스트");
 			System.out.println("-------------------------------------");
-			System.out.println("판매코드 \t 상품명  \t 가격  \t 판매 날짜 \t 아이디");
+			System.out.println("판매코드 \t상품명\t\t가격\t판매 날짜\t\t아이디");
 			System.out.println("-------------------------------------");
 
 			for(Sale sale : list) {
-				System.out.printf("%d \t %s \t %d \t %s \t %d \n", 
-						sale.getSalecode(), sale.getSname(), sale.getPrice(), sale.getSaledate(), sale.getId()
-						);
+				if(sale.getSname().length() >= 8) {
+					System.out.printf("%d\t%s\t%d\t%s\t%s\n", 
+					sale.getSalecode(), sale.getSname(), sale.getPrice(), sale.getSaledate(), sale.getId());
+				}else {
+					System.out.printf("%d\t%s\t\t%d\t%s\t\t%s\n", 
+							sale.getSalecode(), sale.getSname(), sale.getPrice(), sale.getSaledate(), sale.getId());
+				}
+				
 			}
 			System.out.println("-------------------------------------");
 
@@ -107,12 +112,12 @@ public class SaleManager {
 
 			System.out.println("오늘 메뉴별  판매된 갯수 와 판매액을 조회합니다.");
 			System.out.println("------------------------------------------");
-			System.out.println("메뉴 \t              판매수 \t             판매액 ");
+			System.out.println("메뉴\t\t판매수\t판매액 ");
 
 
 
 			for(Sale menu : list) {
-				if(menu.getpName().equals("americano") || menu.getpName().equals("sandwich")) {
+				if(menu.getpName().length() >= 8) {
 					System.out.println(menu.getpName() + "\t" + menu.getpNumSales()+ "\t" + menu.getpSalePrice());
 				}else {
 					System.out.println(menu.getpName() + "\t\t" + menu.getpNumSales()+ "\t" + menu.getpSalePrice());

@@ -37,7 +37,7 @@ public class MemberPage {
 					continue;
 				case 2:
 					memberManager.memDel(login.currentId);
-					continue;
+					break;
 				case 3:
 					continue;
 				}
