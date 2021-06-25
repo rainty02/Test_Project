@@ -299,9 +299,9 @@ public class SaleManager {
 					System.out.println("메뉴\t\t수량 \t금액");
 					for(int i=0; i<list.size(); i++) {
 						if(list.get(i).getSname().length() >= 8) {
-							System.out.println(list.get(i).getSname() + "\t" + list.get(i).getScount() + "\t" + (list.get(i).getPrice()*list.get(i).getScount()));
+							System.out.println(list.get(i).getSname() + "\t" + list.get(i).getScount() + "\t" + (list.get(i).getPrice()));
 						} else {
-							System.out.println(list.get(i).getSname() + "\t\t" + list.get(i).getScount() + "\t" + (list.get(i).getPrice()*list.get(i).getScount()));
+							System.out.println(list.get(i).getSname() + "\t\t" + list.get(i).getScount() + "\t" + (list.get(i).getPrice()));
 						}	
 					}	
 					System.out.println("\t\t총액 :\t"+totalPrice);
