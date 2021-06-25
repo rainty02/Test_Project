@@ -58,20 +58,20 @@ public class SaleManager {
 
 			System.out.println("판매 정보 리스트");
 			System.out.println("-------------------------------------");
-			System.out.println("판매코드 \t상품명\t\t가격\t판매 날짜\t\t아이디");
-			System.out.println("-------------------------------------");
+			System.out.println("판매코드 \t상품명\t\t가격\t판매 날짜\t\t\t아이디");
+			System.out.println("---------------------------------------------------------");
 
 			for(Sale sale : list) {
 				if(sale.getSname().length() >= 8) {
 					System.out.printf("%d\t%s\t%d\t%s\t%s\n", 
 					sale.getSalecode(), sale.getSname(), sale.getPrice(), sale.getSaledate(), sale.getId());
 				}else {
-					System.out.printf("%d\t%s\t\t%d\t%s\t\t%s\n", 
+					System.out.printf("%d\t%s\t\t%d\t%s\t%s\n", 
 							sale.getSalecode(), sale.getSname(), sale.getPrice(), sale.getSaledate(), sale.getId());
 				}
 				
 			}
-			System.out.println("-------------------------------------");
+			System.out.println("---------------------------------------------------------");
 
 
 		} catch (SQLException e) {
