@@ -19,7 +19,6 @@ public class SaleManager {
 	private SaleDao dao;
 	private MenuDao mdao;
 	Scanner scanner;
-	private String currentId;
 	Point pManager;
 	Login login = new Login(MemberDao.getInstance());
 	int totalPrice;
@@ -38,7 +37,6 @@ public class SaleManager {
 		this.dao = dao;
 		this.mdao = mdao;
 		scanner= new Scanner(System.in);
-		this.currentId = currentId;
 		pManager = new Point();
 	}
 
@@ -183,14 +181,14 @@ public class SaleManager {
 
 				
 					//------------------------------------------------------------------------------------------
-					//결제
+					
 		} catch (SQLException e) {
 
 			e.printStackTrace();
 		}
 	}
-				
-		void pay() {
+		//결제
+		void pay(String currentId) {
 					
 					//-------------------------------------------------------------------------------------------
 					//회원 DB에서 point를 read하기
@@ -257,13 +255,7 @@ public class SaleManager {
 
 
 					System.exit(0);
-				
-			
 
-//		} catch (SQLException e) {
-//
-//			e.printStackTrace();
-//		}
 	}
 
 }
