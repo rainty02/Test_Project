@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 
-public class MemberMain {
+public class AppMain {
 
 	public static void main(String[] args) {
 
