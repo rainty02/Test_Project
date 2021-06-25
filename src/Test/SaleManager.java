@@ -58,12 +58,12 @@ public class SaleManager {
 
 			System.out.println("판매 정보 리스트");
 			System.out.println("-------------------------------------");
-			System.out.println("판매코드 \t 상품명  \t 가격  \t 판매 날짜");
+			System.out.println("판매코드 \t 상품명  \t 가격  \t 판매 날짜 \t 아이디");
 			System.out.println("-------------------------------------");
 
 			for(Sale sale : list) {
-				System.out.printf("%d \t %s \t %d \t %s \n", 
-						sale.getSalecode(), sale.getSname(), sale.getPrice(), sale.getSaledate()
+				System.out.printf("%d \t %s \t %d \t %s \t %d \n", 
+						sale.getSalecode(), sale.getSname(), sale.getPrice(), sale.getSaledate(), sale.getId()
 						);
 			}
 			System.out.println("-------------------------------------");
@@ -193,7 +193,7 @@ public class SaleManager {
 					if (Integer.parseInt(inputDatas[0]) == menu.get(inx).getRowNum()) {
 						list.add(new Sale(Integer.parseInt(inputDatas[1]), menu.get(inx).getMname(), menu.get(inx).getPrice()*Integer.parseInt(inputDatas[1])));
 						
-						System.out.println(menu.get(inx).getMname()+ " "+ inputDatas[1]+"잔 주문");
+						System.out.println(menu.get(inx).getMname()+ " "+ inputDatas[1]+"개 주문");
 					}
 				}
 			}
@@ -295,6 +295,7 @@ public class SaleManager {
 					}
 					
 					// 영수증
+					System.out.println("영수증 출력");
 					System.out.println("메뉴\t\t수량 \t금액");
 					for(int i=0; i<list.size(); i++) {
 						if(list.get(i).getSname().length() >= 8) {
