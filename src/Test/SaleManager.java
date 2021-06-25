@@ -39,6 +39,13 @@ public class SaleManager {
 		scanner= new Scanner(System.in);
 		pManager = new Point();
 	}
+	
+	public SaleManager(SaleDao dao){
+		// 초기화
+		this.dao = dao;
+		scanner= new Scanner(System.in);
+		pManager = new Point();
+	}
 
 	// 1. 관리자가 sale DB의 전체리스트틑 확인할 수 있다.
 	void saleList() {
@@ -95,7 +102,7 @@ public class SaleManager {
 		try {
 			conn= DriverManager.getConnection(jdbcUrl, user, pw);
 
-			List<MenuSale> list = dao.getMenuSalePrice(conn);
+			List<Sale> list = dao.getMenuSalePrice(conn);
 
 			System.out.println("오늘 메뉴별  판매된 갯수 와 판매액을 조회합니다.");
 			System.out.println("------------------------------------------");
@@ -103,7 +110,7 @@ public class SaleManager {
 
 
 
-			for(MenuSale menu : list) {
+			for(Sale menu : list) {
 				if(menu.getpName().equals("americano") || menu.getpName().equals("sandwich")) {
 					System.out.println(menu.getpName() + "\t" + menu.getpNumSales()+ "\t" + menu.getpSalePrice());
 				}else {
@@ -118,8 +125,39 @@ public class SaleManager {
 
 	}
 
-
-	// 4. 주문하기 메소드 -> SALE DB에 저장된다. 
+	// 4. 관리자가  인기 상품을 조회할 수 있다.
+		void saleBestList() {
+			
+			try {
+				conn = DriverManager.getConnection(jdbcUrl, user, pw);
+				List<Sale> list = dao.getSaleBestList(conn);
+				
+				System.out.println("판매 상품 인기 순위 리스트");
+				System.out.println("-------------------------------------");
+				System.out.println("순위 \t상품명 \t\t판매횟수 ");
+				System.out.println("-------------------------------------");
+				
+				int rank =1 ;
+				for(Sale sale : list) {
+					System.out.printf("%d  \t %s \t %d ",rank++,  sale.getSname(), sale.getCount());
+					System.out.println();
+				}
+				
+				System.out.println("-------------------------------------");
+				
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	
+	
+	
+	
+	// 5. 주문하기 메소드 -> SALE DB에 저장된다. 
 	void order(String currentId) {
 		
 		MenuManager menuManager = new MenuManager(MenuDao.getInstance());
@@ -187,7 +225,7 @@ public class SaleManager {
 			e.printStackTrace();
 		}
 	}
-		//결제
+		// 6.결제
 		void pay(String currentId) {
 					
 					//-------------------------------------------------------------------------------------------
@@ -254,7 +292,7 @@ public class SaleManager {
 					}
 
 
-					System.exit(0);
+					
 
 	}
 

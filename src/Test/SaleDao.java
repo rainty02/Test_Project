@@ -6,8 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
-//import SaleTest.Menu_test;
+
 
 public class SaleDao {
 	//sale을 조회, 관리한다. 
@@ -50,7 +51,7 @@ public class SaleDao {
 
 			//받아온 데이터를 sale 객체로 생성 ->list에 저장
 			while(rs.next()) {
-				list.add(new Sale(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4)));
+				list.add(new Sale(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5)));
 			}
 
 
@@ -83,11 +84,11 @@ public class SaleDao {
 
 	// 2. 회원이 산 메뉴를 판매 DB에 저장한다. create: insert
 
-	int insertSale(Connection conn, ArrayList<Sale> list, String currentId) {//sale 어레이 리스트 전달받기
+	int insertSale(Connection conn, ArrayList<Sale> list, String currentid) {//sale 어레이 리스트 전달받기
 		int result = 0 ;
 
 
-		String sql = "insert into sale (salecode, sname, price, id) values(sale_salecode_seq.nextval, ?, ?, ?)";
+		String sql = "insert into sale (salecode, sname, price,id) values(sale_sq.nextval, ?, ?, ?)";
 
 
 		try {
@@ -97,7 +98,7 @@ public class SaleDao {
 
 				pstmt.setString(1,list.get(i).getSname());
 				pstmt.setInt(2, list.get(i).getPrice());
-				pstmt.setString(3, currentId);
+				pstmt.setString(3, list.get(i).getId());
 				result = pstmt.executeUpdate();
 			}
 		} catch (SQLException e) {
@@ -147,8 +148,8 @@ public class SaleDao {
 
 
 	// 4. Sale DB에서 메뉴당 판매수와 판매액을 가져온다. READ : select
-	ArrayList<MenuSale> getMenuSalePrice(Connection conn) {
-		ArrayList<MenuSale> list = null;
+	ArrayList<Sale> getMenuSalePrice(Connection conn) {
+		ArrayList<Sale> list = null;
 
 
 		try {
@@ -163,7 +164,7 @@ public class SaleDao {
 
 			//받아온 데이터를 sale 객체로 생성 ->list에 저장
 			while(rs.next()) {
-				list.add(new MenuSale(rs.getString(1), rs.getInt(2), rs.getInt(3)));
+				list.add(new Sale(rs.getString(1), rs.getInt(2), rs.getInt(3)));
 			}
 
 
@@ -194,4 +195,48 @@ public class SaleDao {
 		return list;
 	}
 
+	
+	// 5. Sale DB에서 인기 상품을 가져온다 READ: select
+	ArrayList<Sale> getSaleBestList(Connection conn){
+		ArrayList<Sale> list = null;
+
+		
+		try {
+			stmt = conn.createStatement();
+			String sql = "select  sname, count from (select distinct sname, count(sname) as count from sale group by sname order by count desc ) where rownum < 4";
+			
+			rs = stmt.executeQuery(sql);
+			list = new ArrayList<>();
+			while(rs.next()) {
+				list.add(new Sale( rs.getInt(2), rs.getString(1)));
+			}
+					
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return list;
+		
+	}
+	
 }
