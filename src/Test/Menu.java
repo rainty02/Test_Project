@@ -3,18 +3,18 @@ package Test;
 public class Menu {
 
 	private int menuCode;
-	private String rowNum;
+	private int rowNum;
 	private String mname;
 	private int price;
 
-	public Menu(int menuCode, String rowNum, String mname, int price) {
+	public Menu(int menuCode, int rowNum, String mname, int price) {
 		this.menuCode = menuCode;
 		this.rowNum = rowNum;
 		this.mname = mname;
 		this.price = price;
 	}
 	
-	public Menu(String rowNum, String mname, int price) {
+	public Menu(int rowNum, String mname, int price) {
 		this.rowNum = rowNum;
 		this.mname = mname;
 		this.price = price;
@@ -28,11 +28,11 @@ public class Menu {
 	
 	public Menu() {}
 	
-	public Menu(int menuCode, String menuName, int price) {
-		this.menuCode = menuCode;
-		this.mname = mname;
-		this.price = price;
-	}
+//	public Menu(int menuCode, String menuName, int price) {
+//		this.menuCode = menuCode;
+//		this.mname = mname;
+//		this.price = price;
+//	}
 
 	public int getMenuCode() {
 		return menuCode;
@@ -43,11 +43,11 @@ public class Menu {
 	}
 
 		
-	public String getRowNum() {
+	public int getRowNum() {
 		return rowNum;
 	}
 
-	public void setRowNum(String rowNum) {
+	public void setRowNum(int rowNum) {
 		this.rowNum = rowNum;
 	}
 

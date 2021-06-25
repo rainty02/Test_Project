@@ -6,7 +6,7 @@ public class AdminPage {
 
 	Scanner sc = new Scanner(System.in);
 	MemberManager memManager = new MemberManager(MemberDao.getInstance());
-	SaleManager saleManager = new SaleManager(SaleDao.getInstance());
+	SaleManager saleManager = new SaleManager(SaleDao.getInstance(), MenuDao.getInstance());
 	MenuManager menuManager = new MenuManager(MenuDao.getInstance());
 
 	void calling() {

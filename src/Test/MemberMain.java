@@ -13,7 +13,7 @@ public class MemberMain {
 
 		MemberManager manager = new MemberManager(MemberDao.getInstance());
 		MenuManager menuManager = new MenuManager(MenuDao.getInstance());
-		SaleManager saleManager = new SaleManager(SaleDao.getInstance());
+		SaleManager saleManager = new SaleManager(SaleDao.getInstance(), MenuDao.getInstance());
 		AdminPage adminPage = new AdminPage();
 		Login login = new Login(MemberDao.getInstance());
 		Point point = new Point();
@@ -27,13 +27,13 @@ public class MemberMain {
 			System.out.println("1. 회원가입");
 			System.out.println("2. 로그인");
 			System.out.print("메뉴를 선택하세요 > ");
-			String num = sc.nextLine().trim();
+			int num = Integer.parseInt(sc.nextLine().trim());
 			switch (num) {
-			case "1":
+			case 1:
 				manager.memAdd();
 				login.chkLogin();
 				break;
-			case "2":
+			case 2:
 				login.chkLogin();
 				if (login.currentId.equals("admin")) {
 					adminPage.calling();

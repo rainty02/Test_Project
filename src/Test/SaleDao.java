@@ -83,11 +83,11 @@ public class SaleDao {
 
 	// 2. 회원이 산 메뉴를 판매 DB에 저장한다. create: insert
 
-	int insertSale(Connection conn, ArrayList<Sale> list) {//sale 어레이 리스트 전달받기
+	int insertSale(Connection conn, ArrayList<Sale> list, String currentId) {//sale 어레이 리스트 전달받기
 		int result = 0 ;
 
 
-		String sql = "insert into sale (salecode, sname, price) values(sale_salecode_seq.nextval, ?, ?)";
+		String sql = "insert into sale (salecode, sname, price, id) values(sale_salecode_seq.nextval, ?, ?, ?)";
 
 
 		try {
@@ -97,6 +97,7 @@ public class SaleDao {
 
 				pstmt.setString(1,list.get(i).getSname());
 				pstmt.setInt(2, list.get(i).getPrice());
+				pstmt.setString(3, currentId);
 				result = pstmt.executeUpdate();
 			}
 		} catch (SQLException e) {

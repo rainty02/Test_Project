@@ -29,7 +29,7 @@ public class MenuDao {
 			list = new ArrayList<>();
 			
 			while(rs.next()) {
-				Menu menu = new Menu(rs.getString(1), rs.getString(2), rs.getInt(3));
+				Menu menu = new Menu(rs.getInt(1), rs.getString(2), rs.getInt(3));
 				list.add(menu);
 			}
 			
