@@ -83,16 +83,16 @@ public class MenuManager {
 			con = DriverManager.getConnection(jdbcUrl, user, pw);
 			
 			// 수정하려는 메뉴코드 입력
-			System.out.print("수정하려는 메뉴코드를 입력하세요 > ");
-			int menuCode = Integer.parseInt(sc.nextLine().trim());
+			System.out.print("수정하려는 메뉴이름을 입력하세요 > ");
+			String menuName = sc.nextLine().trim();
 
 			// 컬럼별 수정값 입력
-			System.out.print("메뉴이름을 입력하세요 > ");
-			String menuName = sc.nextLine().trim();
+			System.out.println("메뉴이름을 입력하세요 > ");
+			String editName = sc.nextLine().trim();
 			System.out.print("가격을 입력하세요 > ");
 			int price = Integer.parseInt(sc.nextLine());
 			
-			Menu menu = new Menu(menuCode, menuName, price);
+			Menu menu = new Menu(menuName, editName, price);
 			
 			int result = dao.editMenu(con, menu);
 
@@ -115,10 +115,10 @@ public class MenuManager {
 		
 		try {
 			con = DriverManager.getConnection(jdbcUrl, user, pw);
-			System.out.print("삭제하려는 메뉴코드를 입력하세요 > ");
-			int menuCode = Integer.parseInt(sc.nextLine());
+			System.out.print("삭제하려는 메뉴이름를 입력하세요 > ");
+			String menuName = sc.nextLine().trim();
 			
-			int result = dao.deleteMenu(con, menuCode);
+			int result = dao.deleteMenu(con, menuName);
 			if(result > 0) {
 				System.out.println("삭제되었습니다.");
 			} else {

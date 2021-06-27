@@ -3,18 +3,20 @@ package Test;
 public class Menu {
 
 	private int menuCode;
-	private String rowNum;
+	private int rowNum;
 	private String mname;
 	private int price;
+	private String editName;
 
-	public Menu(int menuCode, String rowNum, String mname, int price) {
+	// 매개변수 두번째 int rowNum
+	public Menu(int menuCode, int rowNum, String mname, int price) {
 		this.menuCode = menuCode;
 		this.rowNum = rowNum;
 		this.mname = mname;
 		this.price = price;
 	}
 	
-	public Menu(String rowNum, String mname, int price) {
+	public Menu(int rowNum, String mname, int price) {
 		this.rowNum = rowNum;
 		this.mname = mname;
 		this.price = price;
@@ -25,13 +27,22 @@ public class Menu {
 		this.price = price;
 	}
 	
-	
+	public Menu(String mname, String editName, int price) {
+		this.mname = mname;
+		this.editName = editName;
+		this.price = price;
+	}
+		
 	public Menu() {}
 	
-	public Menu(int menuCode, String menuName, int price) {
-		this.menuCode = menuCode;
-		this.mname = mname;
-		this.price = price;
+
+	
+	public String getEditName() {
+		return editName;
+	}
+
+	public void setEditName(String editName) {
+		this.editName = editName;
 	}
 
 	public int getMenuCode() {
@@ -43,11 +54,11 @@ public class Menu {
 	}
 
 		
-	public String getRowNum() {
+	public int getRowNum() {
 		return rowNum;
 	}
 
-	public void setRowNum(String rowNum) {
+	public void setRowNum(int rowNum) {
 		this.rowNum = rowNum;
 	}
 

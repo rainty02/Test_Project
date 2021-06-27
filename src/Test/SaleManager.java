@@ -19,9 +19,12 @@ public class SaleManager {
 	private SaleDao dao;
 	private MenuDao mdao;
 	Scanner scanner;
-	private String currentId;
 	Point pManager;
-
+	Login login = new Login(MemberDao.getInstance());
+	int totalPrice;
+	int expectedPoint;
+	ArrayList<Sale> list;
+	
 	// Connection 객체 생성 
 	Connection conn = null;
 
@@ -29,19 +32,20 @@ public class SaleManager {
 	String jdbcUrl = "jdbc:oracle:thin:@localhost:1521:xe";
 	String user = "hr";
 	String pw = "tiger";
-
-	public SaleManager(MenuDao mdao){
+	
+	public SaleManager(SaleDao dao, MenuDao mdao){
 		// 초기화
+		this.dao = dao;
 		this.mdao = mdao;
+		scanner= new Scanner(System.in);
+		pManager = new Point();
 	}
 	
 	public SaleManager(SaleDao dao){
 		// 초기화
 		this.dao = dao;
 		scanner= new Scanner(System.in);
-		this.currentId = currentId;
 		pManager = new Point();
-
 	}
 
 	// 1. 관리자가 sale DB의 전체리스트틑 확인할 수 있다.
@@ -54,15 +58,20 @@ public class SaleManager {
 
 			System.out.println("판매 정보 리스트");
 			System.out.println("-------------------------------------");
-			System.out.println("판매코드 \t 상품명  \t 가격  \t 판매 날짜");
-			System.out.println("-------------------------------------");
+			System.out.println("판매코드 \t상품명\t\t가격\t판매 날짜\t\t\t아이디");
+			System.out.println("---------------------------------------------------------");
 
 			for(Sale sale : list) {
-				System.out.printf("%d \t %s \t %d \t %s \n", 
-						sale.getSalecode(), sale.getSname(), sale.getPrice(), sale.getSaledate()
-						);
+				if(sale.getSname().length() >= 8) {
+					System.out.printf("%d\t%s\t%d\t%s\t%s\n", 
+					sale.getSalecode(), sale.getSname(), sale.getPrice(), sale.getSaledate(), sale.getId());
+				}else {
+					System.out.printf("%d\t%s\t\t%d\t%s\t%s\n", 
+							sale.getSalecode(), sale.getSname(), sale.getPrice(), sale.getSaledate(), sale.getId());
+				}
+				
 			}
-			System.out.println("-------------------------------------");
+			System.out.println("---------------------------------------------------------");
 
 
 		} catch (SQLException e) {
@@ -99,16 +108,16 @@ public class SaleManager {
 		try {
 			conn= DriverManager.getConnection(jdbcUrl, user, pw);
 
-			List<MenuSale> list = dao.getMenuSalePrice(conn);
+			List<Sale> list = dao.getMenuSalePrice(conn);
 
 			System.out.println("오늘 메뉴별  판매된 갯수 와 판매액을 조회합니다.");
 			System.out.println("------------------------------------------");
-			System.out.println("메뉴 \t              판매수 \t             판매액 ");
+			System.out.println("메뉴\t\t판매수\t판매액 ");
 
 
 
-			for(MenuSale menu : list) {
-				if(menu.getpName().equals("americano") || menu.getpName().equals("sandwich")) {
+			for(Sale menu : list) {
+				if(menu.getpName().length() >= 8) {
 					System.out.println(menu.getpName() + "\t" + menu.getpNumSales()+ "\t" + menu.getpSalePrice());
 				}else {
 					System.out.println(menu.getpName() + "\t\t" + menu.getpNumSales()+ "\t" + menu.getpSalePrice());
@@ -122,21 +131,45 @@ public class SaleManager {
 
 	}
 
-
-	// 4. 주문하기 메소드 -> SALE DB에 저장된다. 
+	// 4. 관리자가  인기 상품을 조회할 수 있다.
+		void saleBestList() {
+			
+			try {
+				conn = DriverManager.getConnection(jdbcUrl, user, pw);
+				List<Sale> list = dao.getSaleBestList(conn);
+				
+				System.out.println("판매 상품 인기 순위 리스트");
+				System.out.println("-------------------------------------");
+				System.out.println("순위 \t상품명 \t\t판매횟수 ");
+				System.out.println("-------------------------------------");
+				
+				int rank =1 ;
+				for(Sale sale : list) {
+					System.out.printf("%d  \t %s \t %d ",rank++,  sale.getSname(), sale.getCount());
+					System.out.println();
+				}
+				
+				System.out.println("-------------------------------------");
+				
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	
+	
+	
+	
+	// 5. 주문하기 메소드 -> SALE DB에 저장된다. 
 	void order(String currentId) {
-		ArrayList<Sale> list = new ArrayList<>();
-
-		// 주문하기 = sale DB에 저장한다. 
+		
+		MenuManager menuManager = new MenuManager(MenuDao.getInstance());
+		list = new ArrayList<>();
 
 		//connection객체 생성
-
-		int americano = 4100;
-		int latte = 4600;
-		int sandwich =6200;
-		int salad = 5000;
-		int cake = 5500;
-
 		Connection conn = null;
 
 		// 연결
@@ -147,80 +180,62 @@ public class SaleManager {
 		try {
 			conn = DriverManager.getConnection(jdbcUrl,user,pw);
 
-//			HashMap<String, Integer> map = new HashMap<>();
-//			
-//			List<Menu> menu = mdao.getList(conn);
-//			// mem의 크기만큼 반복 후 map에 아이디를 키값으로 비밀번호를 밸류값으로 저장
-//			for (int i = 0; i < menu.size(); i++) {
-//				map.put(menu.get(i).getRowNum(), menu.get(i).getPrice());
-//			}
-			
-			MenuManager menuManager = new MenuManager(MenuDao.getInstance());
-						
+			ArrayList<Menu> menu = new ArrayList<>();			
+			menu = mdao.getList(conn);
+		
 			menuManager.menuList();
-//			System.out.println("메뉴 입니다.");
-//			System.out.println("--------------------------------------------------");
-//			System.out.println("1. Amerciano : 4100");
-//			System.out.println("2. Latte : 4600");
-//			System.out.println("3. Sandwich : 6200");
-//			System.out.println("4. salad : 5000");
-//			System.out.println("5. cake : 5500");
-//			System.out.println("6. 주문 완료");
-//			System.out.println("--------------------------------------------------");
 
 			while(true) {
-				System.out.println("원하시는 메뉴의 번호와 수량을 입력하세요.");
+				System.out.println("원하시는 메뉴의 번호와 수량을 입력하세요. 주문이 완료되면 0을 입력하세요.");
 				System.out.println("예시)1 3");
 				String inputData = scanner.nextLine();
 				String[] inputDatas = inputData.split(" ");
-			
-				//샀을 때 sale객체로 정보 넣기
-
-				switch(inputDatas[0]) {
-			
-				case "1":
-					list.add(new Sale("americano", Integer.parseInt(inputDatas[1])*americano));
-					System.out.println("americano "+ inputDatas[1]+"잔 주문");
+				
+				if(Integer.parseInt(inputDatas[0]) == 0) {
 					break;
-				case "2":
-					list.add(new Sale("latte", Integer.parseInt(inputDatas[1])*latte));
-					System.out.println("latte "+ inputDatas[1]+"잔 주문");
-					break;
-				case "3":
-					list.add(new Sale("sandwich", Integer.parseInt(inputDatas[1])*sandwich));
-					System.out.println("sandwich "+ inputDatas[1]+"개 주문");
-					break;
-				case "4":
-					list.add(new Sale("salad", Integer.parseInt(inputDatas[1])*salad));
-					System.out.println("salad "+ inputDatas[1]+"개 주문");
-					break;
-				case "5": 
-					list.add(new Sale("cake", Integer.parseInt(inputDatas[1])*cake));
-					System.out.println("cake "+ inputDatas[1]+"개 주문");
-					break;
-				case "6":
+				}
+				for (int inx=0; inx<menu.size(); inx++) {	
+					if (Integer.parseInt(inputDatas[0]) == menu.get(inx).getRowNum()) {
+						list.add(new Sale(Integer.parseInt(inputDatas[1]), menu.get(inx).getMname(), menu.get(inx).getPrice()*Integer.parseInt(inputDatas[1])));
+						
+						System.out.println(menu.get(inx).getMname()+ " "+ inputDatas[1]+"개 주문");
+					}
+				}
+			}
+	
 					// 주문완료시에 데이터 저장하고, 포인트 적립 및 결제 한다. 
-
-					int result = dao.insertSale(conn, list);  //SaleDao 로 넘겨서 Sale DB에 저장하기
+					int result = dao.insertSale(conn, list, currentId);  //SaleDao 로 넘겨서 Sale DB에 저장하기
 
 					//	------------------------------------------------------------------------------------------
 
 					// 고객에게 예상 적립 포인트와 총 결제 금액 보여주기
 
 					System.out.println("--------------------------------------------------");
-					int totalPrice = 0;
+					totalPrice = 0;
 
 					for(int i = 0; i <list.size(); i++) {
 						totalPrice += list.get(i).getPrice();
 					}
 
-
-					int expectedPoint = (int)(totalPrice * 0.01);
+					expectedPoint = (int)(totalPrice * 0.01);
 
 					System.out.println("총 예상 결제 금액: " +totalPrice +"원 입니다.");	
 					System.out.println("총 예상 적립 포인트:"+ expectedPoint +"점입니다."); 
 
 
+				
+					//------------------------------------------------------------------------------------------
+					
+					
+					
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+	}
+		// 6.결제
+		void pay(String currentId) {
+					
 					//-------------------------------------------------------------------------------------------
 					//회원 DB에서 point를 read하기
 
@@ -234,7 +249,6 @@ public class SaleManager {
 					int answer = Integer.parseInt(scanner.nextLine());
 
 					if(answer == 1) { //포인트 사용하기
-
 
 						int afterPoint;
 
@@ -284,16 +298,18 @@ public class SaleManager {
 
 						System.out.println("--------------------------------------------------");
 					}
-
-
-					System.exit(0);
-				}
-			}
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
+					
+					// 영수증
+					System.out.println("영수증 출력");
+					System.out.println("메뉴\t\t수량 \t금액");
+					for(int i=0; i<list.size(); i++) {
+						if(list.get(i).getSname().length() >= 8) {
+							System.out.println(list.get(i).getSname() + "\t" + list.get(i).getScount() + "\t" + (list.get(i).getPrice()));
+						} else {
+							System.out.println(list.get(i).getSname() + "\t\t" + list.get(i).getScount() + "\t" + (list.get(i).getPrice()));
+						}	
+					}	
+					System.out.println("\t\t총액 :\t"+totalPrice);
 	}
 
 }

@@ -29,7 +29,7 @@ public class MenuDao {
 			list = new ArrayList<>();
 			
 			while(rs.next()) {
-				Menu menu = new Menu(rs.getString(1), rs.getString(2), rs.getInt(3));
+				Menu menu = new Menu(rs.getInt(1), rs.getString(2), rs.getInt(3));
 				list.add(menu);
 			}
 			
@@ -77,12 +77,12 @@ public class MenuDao {
 	int editMenu(Connection con, Menu menu) {
 		int result = 0;		
 		
-		String sql = "update menu set mname = ?, price =? where menucode = ?";
+		String sql = "update menu set mname = ?, price = ? where mname = ?";
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, menu.getMname());
+			pstmt.setString(1, menu.getEditName());
 			pstmt.setInt(2, menu.getPrice());
-			pstmt.setInt(3, menu.getMenuCode());
+			pstmt.setString(3, menu.getMname());
 		
 			result = pstmt.executeUpdate();
 			
@@ -101,13 +101,13 @@ public class MenuDao {
 	}
 	
 	// 4. 메뉴 데이터 삭제
-	int deleteMenu(Connection con, int menuCode) {
+	int deleteMenu(Connection con, String menuName) {
 		int result = 0;
 		
 		try {	
-			String sql = "delete from menu where menucode = ?";
+			String sql = "delete from menu where mname = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, menuCode);
+			pstmt.setString(1, menuName);
 			
 			result = pstmt.executeUpdate();
 			
